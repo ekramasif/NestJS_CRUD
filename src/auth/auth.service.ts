@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt'; // Import JwtService
+import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly jwtService: JwtService, // Inject JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   async findByEmail(email: string): Promise<User | undefined> {
@@ -17,8 +17,7 @@ export class AuthService {
   }
 
   async login(user: User): Promise<string> {
-    const payload = { email: user.email, sub: user.id }; // Create payload for JWT token
-    return this.jwtService.sign(payload); // Return JWT token
+    const payload = { email: user.email, sub: user.id };
+    return this.jwtService.sign(payload);
   }
 }
-
