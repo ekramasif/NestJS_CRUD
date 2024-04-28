@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { Comment } from './comment.interface'; // Import the interface
+import { Comment } from './comment.interface';
 
 @Injectable()
 export class CommentsService {
