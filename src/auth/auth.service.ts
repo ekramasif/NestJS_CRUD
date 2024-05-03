@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+[1:28 am, 29/04/2024] Rafi PUC: import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -16,8 +16,15 @@ export class AuthService {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async login(user: User): Promise<string> {
+  async login(user: User): Promise<{ accessToken: string, refreshToken: string }> {
     const payload = { email: user.email, sub: user.id };
-    return this.jwtService.sign(payload);
+
+    const accessToken = this.jwtService.sign(payload);
+
+    const refreshTokenPayload = { email: user.email, sub: user.id };
+
+    const refreshToken = this.jwtService.sign(refreshTokenPayload, { expiresIn: '7d' });
+
+    return { accessToken, refreshToken };
   }
 }
