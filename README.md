@@ -113,6 +113,8 @@ The application uses TypeORM with MySQL as the database. The database connection
 
 #### Entity Relationships
 
+![ER Diagram](nestdiagram.png)
+
 - **Booking:** Each booking belongs to a user and can have multiple passengers and tickets associated with it.
 - **Passenger:** Each passenger belongs to a booking.
 - **Ticket:** Each ticket belongs to a booking.
