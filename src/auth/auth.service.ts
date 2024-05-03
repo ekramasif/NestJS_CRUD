@@ -1,4 +1,4 @@
-[1:28 am, 29/04/2024] Rafi PUC: import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -23,7 +23,7 @@ export class AuthService {
 
     const refreshTokenPayload = { email: user.email, sub: user.id };
 
-    const refreshToken = this.jwtService.sign(refreshTokenPayload, { expiresIn: '7d' });
+    const refreshToken = this.jwtService.sign(refreshTokenPayload, { expiresIn: '3d' });
 
     return { accessToken, refreshToken };
   }
