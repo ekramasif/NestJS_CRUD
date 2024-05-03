@@ -1,5 +1,5 @@
 <p align="center">
-  NestJS CRUD
+  <b>NestJS CRUD</b>
 </p>
 
 
@@ -7,8 +7,8 @@ This is a NestJS-based application that provides CRUD operations, authentication
 
 ### Prerequisites
 
-- Node.js (v12 or higher)
-- MySQL (or any other compatible database)
+- Node.js
+- MySQL
 
 ### Installation
 
@@ -55,7 +55,41 @@ This is a NestJS-based application that provides CRUD operations, authentication
 
 #### Authentication
 
+- **POST /auth/register:** Register a new user.
+  - Request Body:
+    - `name`: User's name
+    - `email`: User's email address
+    - `password`: User's password
 - **POST /auth/login:** Authenticate a user and obtain a JWT token.
+  - Request Body:
+    - `email`: User's email address
+    - `password`: User's password
+- **GET /auth/get-user:** Get user details using JWT token stored in cookies.
+- **POST /auth/logout:** Log out the user and clear the JWT token stored in cookies.
+
+#### Bookings
+
+- **GET /bookings:** Get a list of all bookings.
+- **GET /bookings/:id:** Get a specific booking by ID.
+- **POST /bookings:** Create a new booking.
+- **PUT /bookings/:id:** Update an existing booking.
+- **DELETE /bookings/:id:** Delete a booking.
+
+#### Passengers
+
+- **GET /passengers:** Get a list of all passengers.
+- **GET /passengers/:id:** Get a specific passenger by ID.
+- **POST /passengers:** Create a new passenger.
+- **PUT /passengers/:id:** Update an existing passenger.
+- **DELETE /passengers/:id:** Delete a passenger.
+
+#### Tickets
+
+- **GET /tickets:** Get a list of all tickets.
+- **GET /tickets/:id:** Get a specific ticket by ID.
+- **POST /tickets:** Create a new ticket.
+- **PUT /tickets/:id:** Update an existing ticket.
+- **DELETE /tickets/:id:** Delete a ticket.
 
 #### Third-Party API Integration
 
@@ -63,7 +97,11 @@ This is a NestJS-based application that provides CRUD operations, authentication
 
 ### Authentication
 
-The application uses JWT for authentication. To authenticate a user, send a POST request to `/auth/login` with the user's email and password in the request body. If the credentials are valid, the server will respond with a JWT token. Include the JWT token in the `Authorization` header for authenticated routes (e.g., GET `/users`).
+The application uses JWT for authentication. To register a new user, send a POST request to `/auth/register` with the user's name, email, and password in the request body. To authenticate a user, send a POST request to `/auth/login` with the user's email and password. Upon successful authentication, the server will respond with a JWT token, which should be included in the `Authorization` header for authenticated routes.
+
+To access authenticated routes, such as getting user details (`/auth/get-user`), the JWT token must be stored in cookies. The user's details can be retrieved by sending a GET request to `/auth/get-user`, which will validate the JWT token stored in cookies and return the user's details.
+
+To log out the user, send a POST request to `/auth/logout`, which will clear the JWT token stored in cookies and log the user out.
 
 ### Third-Party API Integration
 
@@ -72,3 +110,9 @@ The application integrates with a third-party API to fetch data. The specific AP
 ### Database
 
 The application uses TypeORM with MySQL as the database. The database connection is configured in `src/config/database.config.ts`. User data is stored in the `user` table.
+
+#### Entity Relationships
+
+- **Booking:** Each booking belongs to a user and can have multiple passengers and tickets associated with it.
+- **Passenger:** Each passenger belongs to a booking.
+- **Ticket:** Each ticket belongs to a booking.
