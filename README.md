@@ -1,10 +1,9 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  NestJS CRUD
 </p>
 
-## User Management System (CRUD)
 
-This is a NestJS-based application that provides a user management system with CRUD operations, authentication using JSON Web Tokens (JWT), and integration with a third-party API.
+This is a NestJS-based application that provides CRUD operations, authentication using JSON Web Tokens (JWT), managing entity relationships, and integration with a third-party API.
 
 ### Prerequisites
 
