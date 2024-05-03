@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PassengersService } from './passengers.service';
-import { CreatePassengerDto } from './dto/create-passenger.dto';
-import { UpdatePassengerDto } from './dto/update-passenger.dto';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { PassengerService } from './passengers.service';
+import { CreatePassengerDto, UpdatePassengerDto } from './dto/passenger.dto';
+import { Passenger } from './entities/passenger.entity';
 
 @Controller('passengers')
-export class PassengersController {
-  constructor(private readonly passengersService: PassengersService) {}
-
-  @Post()
-  create(@Body() createPassengerDto: CreatePassengerDto) {
-    return this.passengersService.create(createPassengerDto);
-  }
+export class PassengerController {
+  constructor(private readonly passengerService: PassengerService) {}
 
   @Get()
-  findAll() {
-    return this.passengersService.findAll();
+  async findAll(): Promise<Passenger[]> {
+    return this.passengerService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.passengersService.findOne(+id);
+  async findOne(@Param('id') id: number): Promise<Passenger> {
+    return this.passengerService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePassengerDto: UpdatePassengerDto) {
-    return this.passengersService.update(+id, updatePassengerDto);
+  @Post()
+  async create(@Body() createPassengerDto: CreatePassengerDto): Promise<Passenger> {
+    return this.passengerService.create(createPassengerDto);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() updatePassengerDto: UpdatePassengerDto): Promise<Passenger> {
+    return this.passengerService.update(id, updatePassengerDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.passengersService.remove(+id);
+  async remove(@Param('id') id: number): Promise<void> {
+    await this.passengerService.remove(id);
   }
 }

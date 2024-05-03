@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TicketsService } from './tickets.service';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { TicketService } from './tickets.service';
+import { CreateTicketDto, UpdateTicketDto } from './dto/ticket.dto';
+import { Ticket } from './entities/ticket.entity';
 
 @Controller('tickets')
-export class TicketsController {
-  constructor(private readonly ticketsService: TicketsService) {}
-
-  @Post()
-  create(@Body() createTicketDto: CreateTicketDto) {
-    return this.ticketsService.create(createTicketDto);
-  }
+export class TicketController {
+  constructor(private readonly ticketService: TicketService) {}
 
   @Get()
-  findAll() {
-    return this.ticketsService.findAll();
+  async findAll(): Promise<Ticket[]> {
+    return this.ticketService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketsService.findOne(+id);
+  async findOne(@Param('id') id: number): Promise<Ticket> {
+    return this.ticketService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketsService.update(+id, updateTicketDto);
+  @Post()
+  async create(@Body() createTicketDto: CreateTicketDto): Promise<Ticket> {
+    return this.ticketService.create(createTicketDto);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() updateTicketDto: UpdateTicketDto): Promise<Ticket> {
+    return this.ticketService.update(id, updateTicketDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketsService.remove(+id);
+  async remove(@Param('id') id: number): Promise<void> {
+    await this.ticketService.remove(id);
   }
 }

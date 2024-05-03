@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { BookingDto } from './dto/booking.dto';
+import { Booking } from './entities/booking.entity';
 
 @Injectable()
-export class BookingsService {
-  create(createBookingDto: CreateBookingDto) {
-    return 'This action adds a new booking';
+export class BookingService {
+  constructor(
+    @InjectRepository(Booking)
+    private readonly bookingRepository: Repository<Booking>,
+  ) {}
+
+  async findAll(): Promise<Booking[]> {
+    return this.bookingRepository.find();
   }
 
-  findAll() {
-    return `This action returns all bookings`;
+  async findOne(id: number): Promise<Booking> {
+    return this.bookingRepository.findOne({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} booking`;
+  async create(bookingDto: BookingDto): Promise<Booking> {
+    return this.bookingRepository.save(bookingDto);
   }
 
-  update(id: number, updateBookingDto: UpdateBookingDto) {
-    return `This action updates a #${id} booking`;
+  async update(id: number, bookingDto: BookingDto): Promise<Booking> {
+    await this.bookingRepository.update(id, bookingDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
+  async remove(id: number): Promise<void> {
+    await this.bookingRepository.delete(id);
   }
 }

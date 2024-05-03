@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateTicketDto, UpdateTicketDto } from './dto/ticket.dto';
+import { Ticket } from './entities/ticket.entity';
 
 @Injectable()
-export class TicketsService {
-  create(createTicketDto: CreateTicketDto) {
-    return 'This action adds a new ticket';
+export class TicketService {
+  constructor(
+    @InjectRepository(Ticket)
+    private readonly ticketRepository: Repository<Ticket>,
+  ) {}
+
+  async findAll(): Promise<Ticket[]> {
+    return this.ticketRepository.find();
   }
 
-  findAll() {
-    return `This action returns all tickets`;
+  async findOne(id: number): Promise<Ticket> {
+    return this.ticketRepository.findOne({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticket`;
+  async create(createTicketDto: CreateTicketDto): Promise<Ticket> {
+    return this.ticketRepository.save(createTicketDto);
   }
 
-  update(id: number, updateTicketDto: UpdateTicketDto) {
-    return `This action updates a #${id} ticket`;
+  async update(id: number, updateTicketDto: UpdateTicketDto): Promise<Ticket> {
+    await this.ticketRepository.update(id, updateTicketDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
+  async remove(id: number): Promise<void> {
+    await this.ticketRepository.delete(id);
   }
 }

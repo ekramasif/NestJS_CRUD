@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TicketsService } from './tickets.service';
-import { TicketsController } from './tickets.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Ticket } from './entities/ticket.entity';
+import { TicketController } from './tickets.controller';
+import { TicketService } from './tickets.service';
+import { BookingModule } from '../bookings/bookings.module';
 
 @Module({
-  controllers: [TicketsController],
-  providers: [TicketsService],
+  imports: [TypeOrmModule.forFeature([Ticket]), BookingModule],
+  controllers: [TicketController],
+  providers: [TicketService],
 })
-export class TicketsModule {}
+export class TicketModule {}

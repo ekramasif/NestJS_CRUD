@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePassengerDto } from './dto/create-passenger.dto';
-import { UpdatePassengerDto } from './dto/update-passenger.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreatePassengerDto, UpdatePassengerDto } from './dto/passenger.dto';
+import { Passenger } from './entities/passenger.entity';
 
 @Injectable()
-export class PassengersService {
-  create(createPassengerDto: CreatePassengerDto) {
-    return 'This action adds a new passenger';
+export class PassengerService {
+  constructor(
+    @InjectRepository(Passenger)
+    private readonly passengerRepository: Repository<Passenger>,
+  ) {}
+
+  async findAll(): Promise<Passenger[]> {
+    return this.passengerRepository.find();
   }
 
-  findAll() {
-    return `This action returns all passengers`;
+  async findOne(id: number): Promise<Passenger> {
+    return this.passengerRepository.findOne({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} passenger`;
+  async create(createPassengerDto: CreatePassengerDto): Promise<Passenger> {
+    return this.passengerRepository.save(createPassengerDto);
   }
 
-  update(id: number, updatePassengerDto: UpdatePassengerDto) {
-    return `This action updates a #${id} passenger`;
+  async update(id: number, updatePassengerDto: UpdatePassengerDto): Promise<Passenger> {
+    await this.passengerRepository.update(id, updatePassengerDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} passenger`;
+  async remove(id: number): Promise<void> {
+    await this.passengerRepository.delete(id);
   }
 }
